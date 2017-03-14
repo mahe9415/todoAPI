@@ -4,6 +4,7 @@ const _=require('lodash');
 var{mongoose}=require('./db/mongoose');
 var{User}=require('./models/user');
 var{Todo}=require('./models/todo');
+var{authendicate} = require('./middleware/authendicate')
 
 
 var app= express();
@@ -77,7 +78,7 @@ app.patch('/todos/:id',(req,res)=>{
 
 //USER POST
 
-app.post('/user',(req,res)=>{
+	app.post('/user',(req,res)=>{
 	var body = _.pick(req.body,['email','password']);
 	var user = new User(body);
 	user.save().then(()=>{
@@ -88,15 +89,21 @@ app.post('/user',(req,res)=>{
 		res.status(400).send();
 
 	})
-})
+	})
 
 
 
 
 
 
+//USER GET CHECK USING REQ HEADER
+
+app.get('/user/me',authendicate,(req,res)=>{
+	res.send(req.user);
+});
 
 
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1OGM3ZGYzMTU3NzgxMTIyYjg5ZWMyMGQiLCJhY2Nlc3MiOiJhdXRoIiwiaWF0IjoxNDg5NDkzODA5fQ.vMSOuh2GcJcWwShAeJFi5qYLT4eFEUQPBBO_T7SsCFU
 
 
 
