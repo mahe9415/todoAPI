@@ -9,6 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongoose": "^4.9.0"
+    "bcryptjs": "^2.4.3",
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.3.0",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.9.0",
+    "validator": "^7.0.0"
   }
 }
