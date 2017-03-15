@@ -12,7 +12,7 @@ var Todo = mongoose.model('Todo', {
     default: false
   },
   completedAt: {
-    type: Number,
+    type: String,
     default: null
   },
   _creator: {
@@ -20,5 +20,4 @@ var Todo = mongoose.model('Todo', {
     required: true
   }
 });
-
 module.exports = {Todo};

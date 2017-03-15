@@ -5,7 +5,7 @@ var{mongoose}=require('./db/mongoose');
 var{User}=require('./models/user');
 var{Todo}=require('./models/todo');
 var{authendicate} = require('./middleware/authendicate')
-
+var moment = require('moment');
 
 var app= express();
 app.use(bodyParser.json());
@@ -70,7 +70,8 @@ app.patch('/todos/:id',authendicate,(req,res)=>{
 	var id =  req.params.id;
 	var body = _.pick(req.body,['text','completed']);
 	if(_.isBoolean(body.completed)&&body.completed){
-		body.completedAt = new Date().getTime();
+		body.completedAt = moment().format('MMMM Do YYYY , h:mm:ss a');
+
 	}else{
 		body.completed= false;
 		body.completedAt=null;
