@@ -20,8 +20,8 @@ var id=req.params.id;
 
 
 //TODO GET
-app.get('/todos',(req,res)=>{
-	Todo.find().then((doc)=>{
+app.get('/todos',authendicate,(req,res)=>{
+	Todo.find({'_creator':req.user._id }).then((doc)=>{
 		res.send({doc});
 	}).catch((e)=>{
 		res.status(400).send(e);
@@ -29,9 +29,13 @@ app.get('/todos',(req,res)=>{
 })
 
 //TODO POST
-app.post('/todos',(req,res)=>{
-	var body = _.pick(req.body,['text']);
-	var todo = new Todo(body);
+app.post('/todos',authendicate,(req,res)=>{
+	// var body = _.pick(req.body,['text']);
+
+	var todo = new Todo({
+		'text':req.body.text,
+		'_creator':req.user._id
+	});
 	todo.save().then((doc)=>{
 		res.send({doc});
 	}).catch((e)=>
@@ -42,10 +46,14 @@ app.post('/todos',(req,res)=>{
 
 //TODO DELETE
 
- app.delete('/todos/:id',(req,res)=>{
+ app.delete('/todos/:id',authendicate,(req,res)=>{
 
 var id = req.params.id;
-Todo.findByIdAndRemove(id).then((doc)=>
+Todo.findOneAndRemove({
+	_id : id,
+	_creator : req.user._id
+
+}).then((doc)=>
 {	if(!doc){
 		return res.status(400).send()
 	}
@@ -58,7 +66,7 @@ Todo.findByIdAndRemove(id).then((doc)=>
 
 
 //TODO PATCH
-app.patch('/todos/:id',(req,res)=>{
+app.patch('/todos/:id',authendicate,(req,res)=>{
 	var id =  req.params.id;
 	var body = _.pick(req.body,['text','completed']);
 	if(_.isBoolean(body.completed)&&body.completed){
@@ -67,7 +75,7 @@ app.patch('/todos/:id',(req,res)=>{
 		body.completed= false;
 		body.completedAt=null;
 	}
-	Todo.findByIdAndUpdate(id , { $set : body},{new:true}).then((todo)=>{
+	Todo.findOneAndUpdate({_id:id,_creator:req.user._id }, { $set : body},{new:true}).then((todo)=>{
 		res.send({todo})
 	}).catch((e)=>{
 		res.send(e).status(400);

@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
-
 var UserSchema = mongoose.Schema({
 	email: {
     type: String,
@@ -35,8 +34,6 @@ var UserSchema = mongoose.Schema({
     }
   }]
 })
-
-
 
 UserSchema.methods.toJSON =  function(){
 
@@ -101,7 +98,5 @@ UserSchema.pre('save',function(next){
   }
 });
 
-
 var User = mongoose.model('lists', UserSchema);
-
 module.exports = {User}
